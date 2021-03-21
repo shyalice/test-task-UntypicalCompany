@@ -74,7 +74,7 @@ const AddUser = () => {
 
     const dispatch = useDispatch();
 
-    const onAddClick = () =>{
+    const onAdd = () =>{
         dispatch(addUser(newUser));
         handleClose();
     }
@@ -121,7 +121,7 @@ const AddUser = () => {
                         </ButtonGroup>
                         <TextField value={newUser.phone} onChange={(e) => handleChange("phone", e.target.value)} label="Phone" type="number"/>
                         <TextField value={newUser.email} onChange={(e) => handleChange("email", e.target.value)} label="Email"/>
-                        <Button variant="contained" onClick={() => onAddClick()}>Add User</Button>
+                        <Button variant="contained" onClick={() => onAdd()}>Add User</Button>
                     </form>
                 </div>
             </Fade>

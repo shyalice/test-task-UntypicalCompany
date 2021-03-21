@@ -7,10 +7,10 @@ export function addUser(user) {
     }
 }
 
-export function deleteUser(userId) {
+export function deleteUser(deleted) {
     return {
         type: actions.DELETE_USER,
-        userId
+        deleted
     }
 }
 

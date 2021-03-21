@@ -56,20 +56,18 @@ function stableSort(array, comparator) {
 const UsersList = () => {
 	const users = useSelector(state => state.user.users);
 	const classes = useStyles();
-	//table header
-	const [order, setOrder] = useState("asc");
+	const [order, setOrder] = useState("desc");
 	const [orderBy, setOrderBy] = useState("id");
 	const [selected, setSelected] = useState([]);
-	//table pagination
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 
-	//table header
 	const handleRequestSort = (event, property) => {
 		const isAsc = orderBy === property && order === 'asc';
 		setOrder(isAsc ? 'desc' : 'asc');
 		setOrderBy(property);
 	};
+
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
 			const newSelecteds = users.map((user) => user.id);
@@ -79,15 +77,15 @@ const UsersList = () => {
 		setSelected([]);
 	};
 
-	//table pagination
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
 	};
+
 	const handleChangeRowsPerPage = (event) => {
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
 	};
-	//select
+
 	const handleClick = (event, name) => {
 		const selectedIndex = selected.indexOf(name);
 		let newSelected = [];
@@ -108,6 +106,10 @@ const UsersList = () => {
 		setSelected(newSelected);
 	};
 
+	const handleDeleteButton = () =>{
+		setSelected([]);
+	}
+
 	const isSelected = (name) => selected.indexOf(name) !== -1;
 
 	const emptyRows = rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
@@ -115,7 +117,7 @@ const UsersList = () => {
 	return (
 		<div className={classes.root}>
 			<Paper className={classes.paper}>
-				<UsersListTableToolBar numSelected={selected.length}/>
+				<UsersListTableToolBar selected={selected} handleDeleteButton={handleDeleteButton}/>
 				<TableContainer component={Paper}>
 				<Table className={classes.table} size="small">
 					<UsersListTableHeader

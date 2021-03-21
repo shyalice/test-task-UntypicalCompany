@@ -1,7 +1,11 @@
 import * as actions from "./actionTypes";
 
 export const initialState = {
-    users: []
+    users: [
+        {id: 3, name: "valery", lastName: "subbotin", birthday: "19.06.1999"},
+        {id: 2 ,name: "sasha", lastName: "karpov", birthday: "21.03.1984"},
+        {id: 1 ,name: "alisa", lastName: "tihonova", birthday: "06.11.2002"},
+    ]
 };
 
 const userReducer = (state = initialState, action) => {
@@ -16,7 +20,7 @@ const userReducer = (state = initialState, action) => {
         case actions.DELETE_USER:
             return {
                 ...state,
-                users: state.users.filter(user => user.id !== action.userId)
+                users: state.users.filter(user => !action.deleted.find(deletedId => user.id === deletedId))
             };
         case actions.UPDATE_USER:
             return {

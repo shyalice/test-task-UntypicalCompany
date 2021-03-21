@@ -1,3 +1,6 @@
+import React from "react";
+import {useDispatch} from "react-redux";
+import {deleteUser} from "../../Redux/actions";
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -28,38 +31,40 @@ const useToolbarStyles = makeStyles((theme) => ({
 }));
 
 const UsersListTableToolBar = (props) => {
+    const {selected, handleDeleteButton} = props;
     const classes = useToolbarStyles();
-    const { numSelected } = props;
+    const dispatch = useDispatch();
+
+    const onDelete = () =>{
+        dispatch(deleteUser(selected));
+        handleDeleteButton();
+    }
 
     return (
         <Toolbar
-        className={clsx(classes.root, {
-            [classes.highlight]: numSelected > 0,
-        })}
+            className={clsx(classes.root, {
+                [classes.highlight]: selected.length > 0,
+            })}
         >
-        {numSelected > 0 ? (
-            <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-            {numSelected} selected
-            </Typography>
-        ) : (
-            <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-            Users
-            </Typography>
-        )}
+            {selected.length > 0 ? (
+                <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">{selected.length} selected</Typography>
+            ) : (
+                <Typography className={classes.title} variant="h6" id="tableTitle" component="div">Users</Typography>
+            )}
 
-        {numSelected > 0 ? (
-            <Tooltip title="Delete">
-            <IconButton aria-label="delete">
-                <DeleteIcon />
-            </IconButton>
-            </Tooltip>
-        ) : (
-            <Tooltip title="Filter list">
-            <IconButton aria-label="filter list">
-                <FilterListIcon />
-            </IconButton>
-            </Tooltip>
-        )}
+            {selected.length > 0 ? (
+                <Tooltip title="Delete" onClick={() => onDelete()}>
+                    <IconButton aria-label="delete">
+                        <DeleteIcon />
+                    </IconButton>
+                </Tooltip>
+            ) : (
+                <Tooltip title="Filter list">
+                    <IconButton aria-label="filter list">
+                        <FilterListIcon />
+                    </IconButton>
+                </Tooltip>
+            )}
         </Toolbar>
     );
 }

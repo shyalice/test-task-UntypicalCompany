@@ -1,7 +1,7 @@
 import React from "react";
 import {useState} from "react";
 import {useDispatch} from "react-redux";
-import {deleteUser, updateUser} from "../../Redux/actions";
+import {deleteUser} from "../../Redux/actions";
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -35,7 +35,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 }));
 
 const UsersListTableToolBar = (props) => {
-    const {selected, resetSelect, gender, setGender} = props;
+    const {users, selected, resetSelect, gender, setGender, setEditedUser, setEditModal} = props;
     const classes = useToolbarStyles();
     const dispatch = useDispatch();
     const [isOpenFilter, setOpenFilter] = useState(false)
@@ -46,8 +46,8 @@ const UsersListTableToolBar = (props) => {
     }
 
     const onEdit = () =>{
-        dispatch(updateUser(selected[0]));
-        resetSelect();
+        setEditedUser(users.find(user => user.id === selected[0]))
+        setEditModal(true);
     }
 
     return (
@@ -65,7 +65,7 @@ const UsersListTableToolBar = (props) => {
             {selected.length > 0 ? (
                 <>
                     {selected.length === 1 && (
-                        <Tooltip title="Edit">
+                        <Tooltip title="Edit" onClick={() => onEdit()} >
                             <IconButton aria-label="edit">
                                 <EditIcon />
                             </IconButton>

@@ -2,9 +2,9 @@ import * as actions from "./actionTypes";
 
 export const initialState = {
     users: [
-        {id: 3, name: "valery", lastName: "subbotin", birthday: "19.06.1999", gender: "male"},
-        {id: 2 ,name: "sasha", lastName: "karpov", birthday: "21.03.1984", gender: "male"},
-        {id: 1 ,name: "alisa", lastName: "tihonova", birthday: "06.11.2002", gender: "female"},
+        {id: 3, name: "valery", lastName: "subbotin", birthday: "1999-06-18", gender: "male"},
+        {id: 2 ,name: "sasha", lastName: "karpov", birthday: "1984-03-21", gender: "male"},
+        {id: 1 ,name: "alisa", lastName: "tihonova", birthday: "2002-06-11", gender: "female"},
     ]
 };
 
@@ -24,7 +24,7 @@ const userReducer = (state = initialState, action) => {
         case actions.UPDATE_USER:
             return {
                 ...state,
-                users: state.users.map(user => user.id === action.userID ? action.user : user)
+                users: state.users.map(user => user.id === action.user.id ? action.user : user)
             };
         default:
             return state;

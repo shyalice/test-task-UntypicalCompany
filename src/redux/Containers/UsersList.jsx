@@ -1,4 +1,6 @@
 import React from 'react';
+import {updateUser} from "../actions";
+import {useDispatch} from "react-redux";
 import {Link} from "react-router-dom";
 import {useState} from "react";
 import {useSelector} from "react-redux"
@@ -15,6 +17,7 @@ import InfoIcon from '@material-ui/icons/Info';
 
 import UsersListTableHeader from "../../Components/User/UsersListTableHeader";
 import UsersListTableToolBar from "../../Components/User/UsersListTableToolBar";
+import UserModalField from "../../Components/User/UserModalField";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -56,6 +59,7 @@ function stableSort(array, comparator) {
 }
 
 const UsersList = () => {
+	const dispatch = useDispatch();
 	const [gender, setGender] = useState(null)
 	const users = genderFilter(useSelector(state => state.user.users), gender);
 	const classes = useStyles();
@@ -64,6 +68,8 @@ const UsersList = () => {
 	const [selected, setSelected] = useState([]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
+	const [isEditModal, setEditModal] = useState(false);
+	const [editedUser, setEditedUser] = useState(null);
 
 	function genderFilter(users, gender){
 		switch(gender){
@@ -124,6 +130,22 @@ const UsersList = () => {
 		setSelected([]);
 	}
 
+	const handleCloseEditModal = () =>{
+		setEditModal(false);
+	}
+
+	const onEdit = () =>{
+        dispatch(updateUser(editedUser));
+        setEditModal(false);
+    }
+
+	const handleChangeEditedUser = (name, value) => {
+        setEditedUser(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
 	const isSelected = (name) => selected.indexOf(name) !== -1;
 
 	const emptyRows = rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
@@ -131,7 +153,7 @@ const UsersList = () => {
 	return (
 		<div className={classes.root}>
 			<Paper className={classes.paper}>
-				<UsersListTableToolBar selected={selected} resetSelect={resetSelect} gender={gender} setGender={setGender}/>
+				<UsersListTableToolBar users={users} selected={selected} resetSelect={resetSelect} gender={gender} setGender={setGender} setEditedUser={setEditedUser} setEditModal={setEditModal}/>
 				<TableContainer component={Paper}>
 				<Table className={classes.table} size="small">
 					<UsersListTableHeader
@@ -160,7 +182,7 @@ const UsersList = () => {
 								>
 									<TableCell onClick={(event) => handleClick(event, user.id)} padding="checkbox"><Checkbox checked={isItemSelected} inputProps={{ 'aria-labelledby': labelId }}/></TableCell>
 									<TableCell component="th" id={labelId} scope="row">{user.id}</TableCell>
-									<TableCell>{user.name} {user.lastName}</TableCell>
+									<TableCell>{user.name[0].toUpperCase() + user.name.slice(1)} {user.lastName[0].toUpperCase() + user.lastName.slice(1)}</TableCell>
 									<TableCell>{user.birthday.split("-").reverse().join(".")}</TableCell>
 									<TableCell style={{borderTop: "1px solid rgba(224, 224, 224, 1)"}}>
 										<Link to={`/user/${user.id}`}><InfoIcon color="primary" /></Link>
@@ -184,6 +206,14 @@ const UsersList = () => {
 					page={page}
 					onChangePage={handleChangePage}
 					onChangeRowsPerPage={handleChangeRowsPerPage}
+				/>
+				<UserModalField
+					title="Update User"
+					isOpen={isEditModal}
+					handleClose={handleCloseEditModal}
+					handleChange={handleChangeEditedUser}
+					onClick={onEdit}
+					user={editedUser}
 				/>
 			</Paper>
 		</div>

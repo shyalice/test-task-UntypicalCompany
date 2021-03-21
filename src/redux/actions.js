@@ -14,10 +14,9 @@ export function deleteUser(deleted) {
     }
 }
 
-export function updateUser(userId, user) {
+export function updateUser(user) {
     return {
         type: actions.UPDATE_USER,
-        userId,
         user
     }
 }

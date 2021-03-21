@@ -59,7 +59,7 @@ const UsersListTableToolBar = (props) => {
             {selected.length > 0 ? (
                 <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">{selected.length} selected</Typography>
             ) : (
-                <Typography className={classes.title} variant="h6" id="tableTitle" component="div">Users</Typography>
+                <Typography className={classes.title} variant="h6" id="tableTitle" component="div">Users ({users.length})</Typography>
             )}
 
             {selected.length > 0 ? (
